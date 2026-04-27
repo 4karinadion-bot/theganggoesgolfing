@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F3F3F7">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400i&display=swap" rel="stylesheet">
+<title>The Gang Goes Golfing</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#081208;
+  --surface:#0c1d0e;
+  --surface2:#102615;
+  --border:#1a3d20;
+  --yellow:#f5d130;
+  --yellow-dk:#d4aa0a;
+  --red:#c8102e;
+  --over:#8a9e8e;
+  --orange:#e8a020;
+  --blue:#7ab3c8;
+  --text:#7A848D;
+  --muted:#6b8f72;
+  --serif:'Playfair Display',Georgia,serif;
+  --r:20px;
+  --tap:48px;
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:linear-gradient(to bottom,#F3F3F7 0%,#D7DCE3 100%) fixed;
+  color:var(--text);
+  min-height:100vh;padding-bottom:calc(80px + env(safe-area-inset-bottom));font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── HEADER ── */
+.hdr{
+  background:transparent;
+  padding:16px 30px 8px;text-align:center;
+  position:relative;
+}
+.hdr-flag{font-size:3.6rem;margin-bottom:8px;display:block}
+.hdr h1{
+  font-family:var(--serif);font-size:0.85rem;font-weight:900;
+  color:#7A848D;letter-spacing:2px;text-transform:uppercase;line-height:1.15;
+}
+.hdr-rule{width:60px;height:1px;background:#3A904B;opacity:.4;margin:8px auto}
+.hdr .sub{font-family:var(--serif);font-style:italic;color:#7A848D;font-size:.90rem;margin-bottom:5px}
+.hdr .crs{color:#7A848D;font-size:.68rem;letter-spacing:.5px;text-transform:uppercase}
+
+/* ── NAV ── */
+.nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(255,255,255,0.8);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 -4px 20px rgba(0,0,0,0.14);
+  display:flex;z-index:100;
+  min-height:64px;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.nb{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  min-height:64px;padding:10px 4px 8px;
+  border:none;background:none;color:#2D2F35;
+  font-size:.65rem;cursor:pointer;gap:4px;
+  transition:color .2s;letter-spacing:.3px;text-transform:uppercase;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.nb.on .ic{background:linear-gradient(135deg,#93CDCF,#4AA45C)}
+.nb.on span:not(.ic){background:linear-gradient(135deg,#93CDCF,#4AA45C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nb .ic{
+  display:block;width:20px;height:20px;flex-shrink:0;
+  background-color:#2D2F35;
+  -webkit-mask-size:contain;mask-size:contain;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-position:center;mask-position:center;
+  transition:background .2s;
+}
+.nb:hover .ic,.nb:active .ic{background:linear-gradient(135deg,#93CDCF,#4AA45C)}
+.nb[data-p="signup"] .ic{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8'/%3E%3C/svg%3E");
+}
+.nb[data-p="teams"] .ic{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='8' r='3.5'/%3E%3Cpath d='M2 20c0-3.9 3.1-7 7-7s7 3.1 7 7'/%3E%3Ccircle cx='17.5' cy='8' r='3'/%3E%3Cpath d='M22 20c0-3.3-2.2-6-4.5-6.5'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='8' r='3.5'/%3E%3Cpath d='M2 20c0-3.9 3.1-7 7-7s7 3.1 7 7'/%3E%3Ccircle cx='17.5' cy='8' r='3'/%3E%3Cpath d='M22 20c0-3.3-2.2-6-4.5-6.5'/%3E%3C/svg%3E");
+}
+.nb[data-p="score"] .ic{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='3' width='14' height='18' rx='2'/%3E%3Cline x1='9' y1='8' x2='15' y2='8'/%3E%3Cline x1='9' y1='12' x2='15' y2='12'/%3E%3Cline x1='9' y1='16' x2='13' y2='16'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='3' width='14' height='18' rx='2'/%3E%3Cline x1='9' y1='8' x2='15' y2='8'/%3E%3Cline x1='9' y1='12' x2='15' y2='12'/%3E%3Cline x1='9' y1='16' x2='13' y2='16'/%3E%3C/svg%3E");
+}
+.nb[data-p="leaderboard"] .ic{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 21h8M12 17v4M6 3h12v9a6 6 0 0 1-12 0V3z'/%3E%3Cpath d='M6 7H3v3a3 3 0 0 0 3 3M18 7h3v3a3 3 0 0 1-3 3'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 21h8M12 17v4M6 3h12v9a6 6 0 0 1-12 0V3z'/%3E%3Cpath d='M6 7H3v3a3 3 0 0 0 3 3M18 7h3v3a3 3 0 0 1-3 3'/%3E%3C/svg%3E");
+}
+.nb[data-p="rules"] .ic{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 19.5A2.5 2.5 0 0 1 6.5 17H20'/%3E%3Cpath d='M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 19.5A2.5 2.5 0 0 1 6.5 17H20'/%3E%3Cpath d='M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'/%3E%3C/svg%3E");
+}
+.nb.on[data-p="signup"] .ic{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8H4z'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8H4z'/%3E%3C/svg%3E");
+}
+.nb.on[data-p="teams"] .ic{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Ccircle cx='8' cy='7' r='3.5'/%3E%3Cpath d='M1 20c0-3.9 3.1-7 7-7s7 3.1 7 7H1z'/%3E%3Ccircle cx='17' cy='7' r='3'/%3E%3Cpath d='M15 20c0-3.5 2.7-6.3 6-6.8V20h-6z'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Ccircle cx='8' cy='7' r='3.5'/%3E%3Cpath d='M1 20c0-3.9 3.1-7 7-7s7 3.1 7 7H1z'/%3E%3Ccircle cx='17' cy='7' r='3'/%3E%3Cpath d='M15 20c0-3.5 2.7-6.3 6-6.8V20h-6z'/%3E%3C/svg%3E");
+}
+.nb.on[data-p="score"] .ic{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Crect x='5' y='3' width='14' height='18' rx='2'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Crect x='5' y='3' width='14' height='18' rx='2'/%3E%3C/svg%3E");
+}
+.nb.on[data-p="leaderboard"] .ic{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M6 2h12v10a6 6 0 0 1-12 0V2z'/%3E%3Crect x='2' y='5' width='4' height='6' rx='2'/%3E%3Crect x='18' y='5' width='4' height='6' rx='2'/%3E%3Crect x='10' y='17' width='4' height='3'/%3E%3Crect x='8' y='20' width='8' height='2' rx='1'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M6 2h12v10a6 6 0 0 1-12 0V2z'/%3E%3Crect x='2' y='5' width='4' height='6' rx='2'/%3E%3Crect x='18' y='5' width='4' height='6' rx='2'/%3E%3Crect x='10' y='17' width='4' height='3'/%3E%3Crect x='8' y='20' width='8' height='2' rx='1'/%3E%3C/svg%3E");
+}
+.nb.on[data-p="rules"] .ic{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'/%3E%3C/svg%3E");
+}
+
+/* ── PAGES ── */
+.page{display:none;padding:14px 20px 8px;max-width:600px;margin:0 auto}
+.page.on{display:block}
+
+/* ── CARDS ── */
+.card{background:transparent;border:1px solid #C6CBD3;border-radius:var(--r);padding:16px;margin-bottom:12px}
+.ctitle{font-family:var(--serif);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px}
+
+/* ── DECORATIVE DIVIDER ── */
+.ydiv{
+  display:flex;align-items:center;gap:8px;margin:14px 0 10px;
+  color:var(--muted);font-size:.68rem;text-transform:uppercase;letter-spacing:1px;
+}
+.ydiv::before,.ydiv::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  min-height:var(--tap);padding:0 18px;border-radius:var(--r);border:none;
+  font-size:1rem;font-weight:700;cursor:pointer;transition:all .15s;width:auto;
+  letter-spacing:.3px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.btn+.btn{margin-top:8px}
+.btn-grn{background:#2D2F35;color:#fff}
+.btn-grn:hover{background:linear-gradient(135deg,#93CDCF,#4AA45C);color:#fff}
+.btn-grn:active{background:linear-gradient(135deg,#93CDCF,#4AA45C);color:#fff;transform:scale(.98)}
+.btn-gld{background:#2D2F35;color:#fff;box-shadow:none}
+.btn-gld:hover{background:linear-gradient(135deg,#93CDCF,#4AA45C);color:#fff}
+.btn-gld:active{background:linear-gradient(135deg,#93CDCF,#4AA45C);color:#fff;transform:scale(.98)}
+.btn-out{background:#2D2F35;border:none;color:#fff}
+.btn-out:hover{background:linear-gradient(135deg,#93CDCF,#4AA45C);color:#fff}
+.btn-out:active{background:linear-gradient(135deg,#93CDCF,#4AA45C);color:#fff;transform:scale(.98)}
+.btn:disabled{opacity:.3;cursor:not-allowed;pointer-events:none}
+
+/* ── INPUTS ── */
+.irow{display:flex;gap:8px;margin-bottom:6px}
+.inp{
+  flex:1;background:transparent;border:1px solid var(--border);
+  border-radius:var(--r);padding:0 14px;height:var(--tap);
+  color:#2D2F35;font-size:16px;
+}
+.inp:focus{outline:none;border-color:transparent;background:linear-gradient(transparent,transparent) padding-box,linear-gradient(135deg,#93CDCF,#4AA45C) border-box}
+.sel{
+  width:100%;background:transparent;border:1px solid #C6CBD3;
+  border-radius:var(--r);padding:0 36px 0 14px;height:var(--tap);
+  color:#2D2F35;font-size:16px;margin-bottom:10px;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b8f72'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 13px center;
+}
+.sel:focus{outline:none;border-color:#93CDCF}
+
+/* ── QUESTIONNAIRE ── */
+.q-wrap{margin-bottom:16px}
+.q-text{
+  font-family:var(--serif);font-size:1.16rem;font-weight:700;
+  color:#2D2F35;line-height:1.4;margin-bottom:20px;
+}
+.q-sub{font-size:.78rem;color:var(--muted);font-style:italic;margin-bottom:18px;line-height:1.4}
+.star-row{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.star-lbl{
+  flex:1;font-family:var(--serif);font-size:.82rem;font-weight:700;color:var(--muted);line-height:1.3;
+  text-transform:uppercase;letter-spacing:.4px;
+}
+.star-lbl.left{text-align:right}
+.star-lbl.right{text-align:left}
+.star-btns{display:flex;gap:2px;flex-shrink:0}
+.star-btn{
+  background:none;border:none;cursor:pointer;
+  font-size:2rem;line-height:1;padding:4px 3px;
+  color:#2a4a2e;transition:color .1s, transform .1s;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  min-width:44px;min-height:44px;text-align:center;
+}
+.star-btn.lit{background:linear-gradient(135deg,#93CDCF,#4AA45C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.star-btn:hover{background:linear-gradient(135deg,#93CDCF,#4AA45C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.star-btn:active{transform:scale(.88);background:linear-gradient(135deg,#93CDCF,#4AA45C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.star-hint{
+  text-align:center;font-size:.72rem;color:var(--muted);
+  margin-top:10px;min-height:18px;font-style:italic;
+}
+.name-section{margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.name-section.hidden{display:none}
+.skill-pip{
+  display:inline-flex;gap:2px;vertical-align:middle;margin-left:6px;
+}
+.skill-pip span{
+  width:7px;height:7px;border-radius:50%;background:var(--border);display:inline-block;
+}
+.skill-pip span.lit{background:linear-gradient(135deg,#93CDCF,#4AA45C)}
+
+/* ── STATS BAR ── */
+.sbar{display:flex;gap:8px;margin-bottom:12px}
+.schip{
+  flex:1;background:transparent;border:1px solid #C6CBD3;
+  border-radius:var(--r);padding:10px 6px;text-align:center;
+}
+.sval{font-size:1.4rem;font-weight:900;color:#7A848D;font-family:var(--serif)}
+.slbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-top:2px}
+
+
+/* ── PLAYER LIST ── */
+.pitem{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px;background:var(--surface2);border-radius:6px;margin-bottom:6px;
+  border-left:2px solid var(--border);
+}
+.pitem:hover{border-left-color:#93CDCF}
+.pname{font-weight:600;font-size:.9rem;display:flex;align-items:center}
+.pbtn{
+  background:none;border:none;color:var(--muted);cursor:pointer;
+  font-size:1.1rem;padding:6px 8px;min-width:var(--tap);min-height:var(--tap);
+  display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+.pbtn:active{color:var(--red)}
+
+/* ── TEAM CARDS ── */
+.tcard{
+  background:transparent;border:1px solid #C6CBD3;
+  border-radius:var(--r);padding:14px;margin-bottom:10px;
+}
+.tnum{font-family:var(--serif);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:4px}
+.tname{font-family:var(--serif);font-weight:700;color:#7A848D;font-size:1rem;margin-bottom:4px}
+.tname[contenteditable]{cursor:text}
+.tname[contenteditable]:hover{text-decoration:underline dotted var(--muted)}
+.tname[contenteditable]:focus{outline:none;text-decoration:none;border-bottom:1px solid #C6CBD3}
+.tplayers{color:var(--muted);font-size:.82rem;line-height:1.6}
+.tprog{font-size:.75rem;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.tmix{
+  display:inline-block;font-size:.6rem;background:#1a3d20;color:#4AA45C;
+  padding:2px 6px;border-radius:20px;font-weight:700;letter-spacing:.4px;
+  margin-top:6px;
+}
+
+/* ── SCORECARD ── */
+.sc-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -2px}
+.sct{width:100%;border-collapse:collapse;font-size:.84rem}
+.sct th{
+  background:transparent;color:#7A848D;
+  font-size:.6rem;text-transform:uppercase;letter-spacing:.8px;
+  padding:10px 5px;text-align:center;border-bottom:2px solid #C6CBD3;
+  white-space:nowrap;font-family:var(--serif);
+}
+.sct td{
+  padding:9px 4px;text-align:center;border-bottom:1px solid #C6CBD3;
+  vertical-align:middle;color:#7A848D;
+}
+.sct tbody tr:active td{background:rgba(0,0,0,.02)}
+.sct tfoot td{font-weight:800;background:transparent;padding:10px 4px;border-top:2px solid #C6CBD3;color:#7A848D}
+.si{
+  width:52px;height:44px;background:#fff;
+  border:1px solid #C6CBD3;border-radius:8px;
+  color:#2D2F35;text-align:center;font-size:16px;font-weight:700;
+  padding:0;touch-action:manipulation;
+}
+.si:focus{outline:none;border-color:transparent;box-shadow:0 0 0 2px rgba(147,205,207,.12);background:#fff padding-box,linear-gradient(135deg,#93CDCF,#4AA45C) border-box}
+
+/* ── SCORE BADGES (Masters-style) ── */
+.sb{
+  display:inline-flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:.82rem;min-width:28px;height:26px;border-radius:3px;
+}
+.eagle{
+  color:var(--red);border:2px solid var(--red);border-radius:50%;
+  width:30px;height:30px;font-size:.75rem;
+  box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--red);
+}
+.birdie{color:var(--red);border:2px solid var(--red);border-radius:50%;width:28px;height:28px;font-size:.78rem}
+.par-s{color:var(--text);background:none}
+.bogey{color:var(--over);border:1px solid var(--border);padding:0 5px;font-size:.78rem}
+.dbl{
+  color:var(--over);border:2px solid var(--border);padding:0 4px;font-size:.78rem;
+  box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--border);
+}
+.trp{color:#5a6b5a;font-size:.75rem}
+
+/* ── THROW BADGE ── */
+.throw-badge{
+  display:inline-block;font-size:.55rem;background:var(--orange);color:#000;
+  padding:1px 4px;border-radius:3px;font-weight:800;margin-left:3px;
+  vertical-align:middle;letter-spacing:.3px;
+}
+
+/* ── CHARLIE CHECKBOXES ── */
+.cc{font-size:.72rem;color:var(--muted)}
+.cc label{
+  cursor:pointer;display:flex;align-items:center;gap:6px;
+  justify-content:center;margin:0;line-height:1.3;
+  min-height:44px;touch-action:manipulation;
+}
+.cc input[type=checkbox]{
+  -webkit-appearance:none;appearance:none;
+  width:20px;height:20px;flex-shrink:0;cursor:pointer;
+  border:1.5px solid #C6CBD3;border-radius:5px;
+  background:transparent;
+  transition:background .15s,border-color .15s;
+}
+.cc input[type=checkbox]:checked{
+  border-color:transparent;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4L3.5 6.5L9 1' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E") center/55% no-repeat,
+    linear-gradient(135deg,#93CDCF,#4AA45C);
+}
+
+/* ── LEADERBOARD ── */
+.lb-header{
+  background:transparent;
+  padding:16px;margin-bottom:12px;text-align:center;
+}
+.lb-header h2{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:#7A848D;text-transform:uppercase;letter-spacing:2px}
+.lb-header p{font-size:.68rem;color:var(--muted);margin-top:3px;letter-spacing:.5px;text-transform:uppercase}
+.lb-table{width:100%;border-collapse:collapse}
+.lb-table thead th{
+  font-family:var(--serif);font-size:.6rem;text-transform:uppercase;letter-spacing:1px;
+  color:var(--muted);padding:9px 10px;border-bottom:1px solid #C6CBD3;
+  background:transparent;
+}
+.lb-table thead th:last-child{text-align:right}
+.lb-table thead th:first-child{text-align:center;width:38px}
+.lb-table tbody tr{border-bottom:1px solid var(--border)}
+.lb-table tbody tr.lb-lead{background:linear-gradient(90deg,rgba(147,205,207,.1),transparent)}
+.lb-table td{padding:12px 10px;vertical-align:middle}
+.lb-rank{text-align:center;font-family:var(--serif);font-weight:700;font-size:1rem;color:var(--muted)}
+.lb-rank.r1{color:#7A848D}.lb-rank.r2{color:#c0c0c0}.lb-rank.r3{color:#cd7f32}
+.lb-players{font-weight:700;font-size:.9rem}
+.lb-holes{font-size:.7rem;color:var(--muted);margin-top:2px}
+.lb-score-col{text-align:right}
+.lb-strokes{font-family:var(--serif);font-size:1.2rem;font-weight:700}
+.lb-rel{font-size:.75rem;margin-top:1px;font-weight:700}
+
+/* score rel colours — Masters: red = under par */
+.under{color:var(--red)}.even{color:var(--text)}.over{color:var(--over)}
+
+/* ── RULES ── */
+.rcard{
+  background:transparent;
+  border-radius:0 var(--r) var(--r) 0;padding:14px;margin-bottom:10px;
+}
+.rnum{font-family:var(--serif);font-size:16.8px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2D2F35;margin-bottom:4px}
+.rtitle{font-family:var(--serif);font-size:1.05rem;font-weight:700;margin-bottom:7px;color:var(--text)}
+.rdesc{font-size:.84rem;color:#6b8f72;line-height:1.6;margin-bottom:8px}
+.rdesc strong{color:var(--text)}
+.rdesc ul{margin-left:16px;margin-top:5px}
+.rdesc li{margin-bottom:3px}
+.rquote{
+  background:transparent;border-radius:5px;padding:10px 12px;
+  font-size:.78rem;font-style:italic;color:#7A848D;line-height:1.6;
+  border-left:2px solid #C6CBD3;
+}
+.rquote .sp{color:var(--muted);font-style:normal;font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.4px}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:48px 16px;color:var(--muted)}
+.empty .eic{font-size:3rem;margin-bottom:12px;display:block;opacity:.6}
+.empty h3{font-family:var(--serif);font-size:1rem;color:var(--text);margin-bottom:6px}
+.empty p{font-size:.85rem;line-height:1.6}
+
+/* ── MISC ── */
+.sechdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sectitle{font-family:var(--serif);font-weight:700;font-size:.98rem}
+.cntbadge{background:var(--surface2);color:var(--muted);padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:700}
+.lgnd{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.lgnd-item{display:inline-flex;align-items:center;gap:5px;font-size:.76rem;color:var(--muted)}
+.ctable{width:100%;border-collapse:collapse;font-size:.82rem}
+.ctable th{font-family:var(--serif);color:var(--muted);font-size:.62rem;text-transform:uppercase;letter-spacing:.8px;padding:8px 6px;border-bottom:1px solid var(--border);text-align:center}
+.ctable th:first-child{text-align:left}
+.ctable td{padding:7px 6px;border-bottom:1px solid var(--border);text-align:center;color:var(--muted)}
+.ctable td:first-child{font-weight:700;color:var(--text);text-align:left}
+.ctable tfoot td{font-weight:800;color:var(--text);padding:9px 6px;border-top:1px solid var(--border);background:var(--surface2)}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <span class="hdr-flag">⛳</span>
+  <h1>The Gang Goes Golfing</h1>
+  <div class="hdr-rule"></div>
+</header>
+
+<main>
+  <div id="pg-signup"      class="page on"></div>
+  <div id="pg-teams"       class="page"></div>
+  <div id="pg-score"       class="page"></div>
+  <div id="pg-leaderboard" class="page"></div>
+  <div id="pg-rules"       class="page"></div>
+</main>
+
+<nav class="nav">
+  <button class="nb on" data-p="signup"      onclick="nav('signup')">      <span class="ic"></span><span>Sign Up</span></button>
+  <button class="nb"    data-p="teams"       onclick="nav('teams')">       <span class="ic"></span><span>Teams</span></button>
+  <button class="nb"    data-p="score"       onclick="nav('score')">       <span class="ic"></span><span>Score</span></button>
+  <button class="nb"    data-p="leaderboard" onclick="nav('leaderboard')"> <span class="ic"></span><span>Board</span></button>
+  <button class="nb"    data-p="rules"       onclick="nav('rules')">       <span class="ic"></span><span>Rules</span></button>
+</nav>
+
+<script>
+// ─────────────────────────────────────────────
+//  COURSE DATA
+// ─────────────────────────────────────────────
+const HOLES = [
+  {num:1, par:4, yds:321},
+  {num:2, par:3, yds:160},
+  {num:3, par:3, yds:147, throwRule:true},
+  {num:4, par:4, yds:224},
+  {num:5, par:4, yds:303},
+  {num:6, par:4, yds:300},
+  {num:7, par:4, yds:301},
+  {num:8, par:4, yds:309},
+  {num:9, par:3, yds:134},
+];
+const PAR_TOTAL = 33;
+
+const STAR_HINTS = ['','Going full Scott — respect the honesty','Getting warmed up','Solid mid-range game','Dialed in','Pure Tiger energy'];
+
+// ─────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────
+let S = loadS();
+let pendingSkill = 0; // transient — chosen star before name is entered
+
+function loadS() {
+  try { const v = localStorage.getItem('gg-golf'); if (v) return JSON.parse(v); } catch(e){}
+  return {players:[], teams:[], locked:false};
+}
+function saveS() { localStorage.setItem('gg-golf', JSON.stringify(S)); }
+
+// ─────────────────────────────────────────────
+//  HELPERS
+// ─────────────────────────────────────────────
+function uid() { return Math.random().toString(36).slice(2,9); }
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function shuffle(arr) {
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function relStr(r) { return r===0?'E':r>0?'+'+r:''+r; }
+function relCls(r) { return r<0?'under':r>0?'over':'even'; }
+
+function teamName(t) { return t.customName || (t.p1 + ' & ' + t.p2); }
+
+function skillPips(skill) {
+  return `<span class="skill-pip">${[1,2,3,4,5].map(i=>`<span class="${i<=skill?'lit':''}"></span>`).join('')}</span>`;
+}
+
+function teamScore(t) {
+  let tot=0, played=0, playedPar=0;
+  for(let i=0;i<9;i++){
+    const v=parseInt(t.scores[i]);
+    if(!isNaN(v)&&t.scores[i]!==null&&t.scores[i]!==''){
+      let eff=v; if(t.charlieBonus[i]) eff=Math.max(1,eff-1);
+      tot+=eff; played++; playedPar+=HOLES[i].par;
+    }
+  }
+  return {tot, played, playedPar, rel:tot-playedPar};
+}
+
+function sbClass(score,par){
+  const d=score-par;
+  if(d<=-2)return'eagle';if(d===-1)return'birdie';if(d===0)return'par-s';
+  if(d===1)return'bogey';if(d===2)return'dbl';return'trp';
+}
+function sbLabel(score,par){
+  const d=score-par;
+  if(d<=-2)return'−2';if(d===-1)return'−1';if(d===0)return'—';
+  return(d>0?'+':'')+d;
+}
+
+// ─────────────────────────────────────────────
+//  NAVIGATION
+// ─────────────────────────────────────────────
+let curPage = 'signup';
+let selTeamId = null;
+
+function nav(p) {
+  curPage = p;
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(el=>el.classList.toggle('on',el.dataset.p===p));
+  document.getElementById('pg-'+p).classList.add('on');
+  renderPage(p);
+}
+
+function renderPage(p) {
+  const el = document.getElementById('pg-'+p);
+  switch(p){
+    case 'signup':      el.innerHTML=rSignup();      bindSignup(); break;
+    case 'teams':       el.innerHTML=rTeams();       break;
+    case 'score':       el.innerHTML=rScore();       bindScore(); break;
+    case 'leaderboard': el.innerHTML=rLeaderboard(); break;
+    case 'rules':       el.innerHTML=rRules();       break;
+  }
+}
+
+// ─────────────────────────────────────────────
+//  RENDER: SIGN UP
+// ─────────────────────────────────────────────
+function rSignup() {
+  if (S.locked) return `
+    <div style="text-align:center;padding:32px 16px;color:var(--muted);font-size:.85rem">Teams are locked — head to the Teams tab.</div>`;
+
+  return `
+<div class="card" style="border:none;max-width:420px;margin:0 auto 12px">
+      <div class="q-wrap">
+        <div class="q-text" style="text-align:center">On a scale of Scott Norwood to Tiger Woods, how good are you at putting balls in their homes?</div>
+        <div class="star-row">
+          <div class="star-lbl left">Scott<br>Norwood</div>
+          <div class="star-btns" id="star-btns">
+            ${[1,2,3,4,5].map(n=>`
+              <button class="star-btn${pendingSkill>=n?' lit':''}" onclick="setStar(${n})" aria-label="${n} star">★</button>
+            `).join('')}
+          </div>
+          <div class="star-lbl right">Tiger<br>Woods</div>
+        </div>
+        <div class="star-hint" id="star-hint">${pendingSkill ? STAR_HINTS[pendingSkill] : "If you don't know who either are, go with Scott."}</div>
+      </div>
+      <div class="name-section${pendingSkill ? '' : ' hidden'}" id="name-section">
+        <div class="ctitle" style="margin-bottom:8px">Now enter your name</div>
+        <div class="irow">
+          <input class="inp" id="pni" type="text" placeholder="Your name..." maxlength="30" autocomplete="off" autocorrect="off" autocapitalize="words"/>
+          <button class="btn btn-grn" id="addbtn">Join</button>
+        </div>
+        <div style="font-size:.7rem;color:var(--muted)">Expecting 20–30 players · Pairs randomized when you lock teams</div>
+      </div>
+    </div>
+  `;
+}
+
+// ── Star rating ──
+function setStar(n) {
+  pendingSkill = n;
+
+  // Update star colours without full re-render
+  document.querySelectorAll('.star-btn').forEach((btn,i)=>{
+    btn.classList.toggle('lit', i < n);
+  });
+  const hint = document.getElementById('star-hint');
+  if (hint) hint.textContent = STAR_HINTS[n];
+
+  const ns = document.getElementById('name-section');
+  if (ns) {
+    ns.classList.remove('hidden');
+    // Focus the name input after a short delay (allows layout to settle)
+    setTimeout(()=>{ document.getElementById('pni')?.focus(); }, 80);
+  }
+}
+
+function bindSignup() {
+  const inp = document.getElementById('pni');
+  const btn = document.getElementById('addbtn');
+  if (!inp || !btn) return;
+  const go = () => {
+    const n = inp.value.trim();
+    if (!n || S.locked || !pendingSkill) return;
+    S.players.push({id:uid(), name:n, skill:pendingSkill});
+    inp.value = '';
+    pendingSkill = 0;
+    saveS();
+    renderPage('signup');
+  };
+  btn.addEventListener('click', go);
+  inp.addEventListener('keydown', e => { if(e.key==='Enter') go(); });
+}
+
+function rmPlayer(id) {
+  S.players = S.players.filter(p=>p.id!==id);
+  saveS(); renderPage('teams');
+}
+
+// ─────────────────────────────────────────────
+//  TEAM LOCKING — skill-balanced pairing
+// ─────────────────────────────────────────────
+function makeTeam(a, b) {
+  return {
+    id: uid(),
+    p1: a.name, p1skill: a.skill||1,
+    p2: b.name, p2skill: b.skill||1,
+    scores: Array(9).fill(null),
+    charlieUsed: Array(9).fill(false),
+    charlieBonus: Array(9).fill(false),
+  };
+}
+
+function lockTeams() {
+  if (S.players.length < 2) return;
+
+  // Split into Tiger tier (4–5) and Scott tier (1–3)
+  const tigers = shuffle(S.players.filter(p=>(p.skill||1)>=4));
+  const scotts = shuffle(S.players.filter(p=>(p.skill||1)<=3));
+
+  S.teams = [];
+
+  // Pair across tiers first
+  const crossCount = Math.min(tigers.length, scotts.length);
+  for (let i=0; i<crossCount; i++) S.teams.push(makeTeam(tigers[i], scotts[i]));
+
+  // Pair any remaining players within their own tier
+  const leftover = shuffle([...tigers.slice(crossCount), ...scotts.slice(crossCount)]);
+  for (let i=0; i+1<leftover.length; i+=2) S.teams.push(makeTeam(leftover[i], leftover[i+1]));
+
+  // Odd player out — absorb into last team
+  if (leftover.length%2 !== 0 && S.teams.length>0) {
+    const odd = leftover[leftover.length-1];
+    S.teams[S.teams.length-1].p2 += ' & '+odd.name;
+  }
+
+  S.teams = shuffle(S.teams);
+  S.locked = true;
+  selTeamId = S.teams[0]?.id||null;
+  saveS(); nav('teams');
+}
+
+function saveTeamName(el) {
+  const t = S.teams.find(x => x.id === el.dataset.tid);
+  if (!t) return;
+  const v = el.textContent.trim();
+  t.customName = v || (t.p1 + ' & ' + t.p2);
+  saveS();
+}
+
+function resetAll() {
+  if (!confirm('Reset everything? All scores and teams will be lost!')) return;
+  S = {players:[], teams:[], locked:false};
+  selTeamId = null; pendingSkill = 0;
+  saveS(); nav('teams');
+}
+
+// ─────────────────────────────────────────────
+//  RENDER: TEAMS
+// ─────────────────────────────────────────────
+function rTeams() {
+  const playerCount = S.players.length;
+
+  // Stats bar
+  const sbarHtml = `
+    <div class="sbar">
+      <div class="schip">
+        <div class="sval">${playerCount}</div>
+        <div class="slbl">Players</div>
+      </div>
+      <div class="schip">
+        <div class="sval">${S.teams.length||'—'}</div>
+        <div class="slbl">Teams</div>
+      </div>
+      <div class="schip">
+        <div class="sval" style="color:${S.locked?'var(--red)':'#3A904B'}">${S.locked?'Locked':'Open'}</div>
+        <div class="slbl">Status</div>
+      </div>
+    </div>`;
+
+  // Players list card (only shown when not locked)
+  const playersHtml = !S.locked ? `
+    <div class="card">
+      <div class="ctitle" style="margin-bottom:10px">Players Signed Up</div>
+      ${playerCount === 0
+        ? `<div style="color:var(--muted);font-size:.85rem;text-align:center;padding:12px 0">No players yet — head to Sign Up.</div>`
+        : S.players.map(p=>`
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #C6CBD3;">
+            <span style="font-size:.95rem;color:var(--text)">${esc(p.name)}</span>
+            <button class="btn btn-out" style="padding:0 16px;font-size:.8rem" onclick="rmPlayer('${p.id}')">Remove</button>
+          </div>`).join('')}
+      ${playerCount >= 2
+        ? `<button class="btn btn-grn" style="margin-top:14px" onclick="lockTeams()">Scramble the Teams!</button>`
+        : playerCount > 0
+        ? `<div style="font-size:.75rem;color:var(--muted);text-align:center;margin-top:10px">Need at least 2 players to scramble.</div>`
+        : ''}
+    </div>` : '';
+
+  // Teams list (shown when locked)
+  const teamsHtml = S.locked && S.teams.length > 0 ? `
+    ${S.teams.map((t,i)=>{
+      const {tot,played,rel}=teamScore(t);
+      return `<div class="tcard">
+        <div class="tnum">Team ${i+1}</div>
+        <div class="tname" contenteditable="true" data-tid="${t.id}" onblur="saveTeamName(this)" onkeydown="if(event.key==='Enter'){this.blur();event.preventDefault()}">${esc(teamName(t))}</div>
+        ${played>0?`<div class="tprog">${played}/9 holes &nbsp;·&nbsp; <span class="${relCls(rel)}" style="font-weight:700">${relStr(rel)}</span></div>`:'<div class="tprog">Not started</div>'}
+      </div>`;
+    }).join('')}
+    <button class="btn btn-out" style="margin-top:4px" onclick="resetAll()">Reset Everything</button>` : '';
+
+  // Empty state when no players and not locked
+  if (!S.locked && playerCount === 0 && S.teams.length === 0) {
+    return `
+      ${sbarHtml}
+      <div class="empty">
+        <span class="eic"></span>
+        <h3>No Players Yet</h3>
+        <p>Head to <strong>Sign Up</strong> to add players,<br>then scramble the teams here.</p>
+      </div>`;
+  }
+
+  return `${sbarHtml}${playersHtml}${teamsHtml}`;
+}
+
+// ─────────────────────────────────────────────
+//  RENDER: SCORECARD
+// ─────────────────────────────────────────────
+function rScore() {
+  const rulesCard = `
+    <div class="card" style="margin-top:12px">
+      <strong style="font-family:var(--serif);display:block;margin-bottom:4px">Wild Card (Charlie Rule)</strong>
+      Once per round — one player swings with <em>both eyes closed</em>.
+      Check <strong>Used</strong>, then <strong>Won!</strong> if it was the best shot — earns <strong>−1 stroke</strong>.
+    </div>`;
+  const legendCard = `
+    <div class="ydiv" style="margin-top:16px">Score Legend</div>
+    <div class="card">
+      <div class="lgnd">
+        <div class="lgnd-item"><span class="sb eagle" style="width:30px;height:30px">−2</span>Eagle (−2+)</div>
+        <div class="lgnd-item"><span class="sb birdie" style="width:28px;height:28px">−1</span>Birdie (−1)</div>
+        <div class="lgnd-item"><span class="sb par-s">—</span>Par</div>
+        <div class="lgnd-item"><span class="sb bogey">+1</span>Bogey</div>
+        <div class="lgnd-item"><span class="sb dbl">+2</span>Double</div>
+        <div class="lgnd-item"><span class="sb trp">+3+</span>Triple</div>
+      </div>
+      <div style="font-size:.7rem;color:var(--muted);margin-top:10px">Red = under par · Circles = Masters tradition</div>
+    </div>`;
+  if (!S.locked || S.teams.length===0) return `
+    <div class="empty">
+      <span class="eic"></span>
+      <h3>No Teams Yet</h3>
+      <p>Go to <strong>Sign Up</strong> to add players and lock teams.</p>
+    </div>${rulesCard}${legendCard}`;
+
+  const tid = selTeamId || S.teams[0].id;
+  const t   = S.teams.find(x=>x.id===tid) || S.teams[0];
+  const {tot,played,rel} = teamScore(t);
+
+  return `
+    <div class="ctitle">Select Team</div>
+    <select class="sel" id="tsel" onchange="selTeam(this.value)">
+      ${S.teams.map((x,i)=>`<option value="${x.id}"${x.id===t.id?' selected':''}>${esc(teamName(x))}</option>`).join('')}
+    </select>
+
+    <div class="sbar">
+      <div class="schip">
+        <div class="sval" id="sv-rel-${t.id}" style="color:${rel<0?'var(--red)':rel>0?'var(--over)':'var(--text)'}">${played>0?relStr(rel):'E'}</div>
+        <div class="slbl">vs Par</div>
+      </div>
+      <div class="schip">
+        <div class="sval" id="sv-tot-${t.id}">${tot||'—'}</div>
+        <div class="slbl">Strokes</div>
+      </div>
+      <div class="schip">
+        <div class="sval" id="sv-hls-${t.id}">${played}/9</div>
+        <div class="slbl">Holes</div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:8px 6px">
+      <div class="sc-wrap">
+        <table class="sct">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding-left:8px">Hole</th>
+              <th>Par</th><th>Yds</th><th>Score</th><th>+/−</th>
+              <th style="font-size:.55rem">Charlie</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${HOLES.map((h,i)=>{
+              const raw=t.scores[i];
+              const v=raw!==null&&raw!==''?parseInt(raw):null;
+              const bon=t.charlieBonus[i];
+              const eff=v!==null?(bon?Math.max(1,v-1):v):null;
+              const cu=t.charlieUsed[i];
+              return `<tr>
+                <td style="font-weight:700;white-space:nowrap;text-align:left;padding-left:8px">
+                  ${h.num}${h.throwRule?`<span class="throw-badge">THROW</span>`:''}
+                </td>
+                <td>${h.par}</td>
+                <td style="font-size:.76rem">${h.yds}</td>
+                <td>
+                  <input class="si" type="number" inputmode="numeric" min="1" max="20"
+                    value="${raw!==null&&raw!==''?raw:''}" placeholder="—"
+                    data-tid="${t.id}" data-hi="${i}" oninput="scoreInput(this)"/>
+                </td>
+                <td id="srel-${t.id}-${i}">
+                  ${eff!==null?`<span class="sb ${sbClass(eff,h.par)}">${sbLabel(eff,h.par)}</span>`:`<span style="color:#7A848D">—</span>`}
+                </td>
+                <td class="cc">
+                  <label><input type="checkbox" aria-label="Used" data-tid="${t.id}" data-hi="${i}" data-type="used" onchange="charlieToggle(this)" ${cu?'checked':''}/></label>
+                </td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2" style="text-align:left;padding-left:8px;font-family:var(--serif);letter-spacing:.5px">TOTAL</td>
+              <td>${PAR_TOTAL}</td>
+              <td style="color:#7A848D" id="sf-tot-${t.id}">${tot||'—'}</td>
+              <td id="sf-rel-${t.id}"><span class="${relCls(rel)}" style="font-weight:700">${played>0?relStr(rel):'—'}</span></td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    ${rulesCard}${legendCard}
+  `;
+}
+
+function bindScore() {}
+function selTeam(id) { selTeamId=id; renderPage('score'); }
+
+function scoreInput(el) {
+  const tid=el.dataset.tid, hi=parseInt(el.dataset.hi), val=el.value;
+  const t=S.teams.find(x=>x.id===tid); if(!t) return;
+  t.scores[hi]=val===''?null:val; saveS();
+  const v=val!==''&&val!==null?parseInt(val):null;
+  const eff=v!==null?(t.charlieBonus[hi]?Math.max(1,v-1):v):null;
+  const relCell=document.getElementById(`srel-${tid}-${hi}`);
+  if(relCell) relCell.innerHTML=eff!==null
+    ?`<span class="sb ${sbClass(eff,HOLES[hi].par)}">${sbLabel(eff,HOLES[hi].par)}</span>`
+    :`<span style="color:#7A848D">—</span>`;
+  refreshTotals(t);
+}
+
+function charlieToggle(el) {
+  const tid=el.dataset.tid, hi=parseInt(el.dataset.hi), type=el.dataset.type;
+  const t=S.teams.find(x=>x.id===tid); if(!t) return;
+  if(type==='used'){ t.charlieUsed[hi]=el.checked; if(!el.checked) t.charlieBonus[hi]=false; }
+  else t.charlieBonus[hi]=el.checked;
+  saveS(); renderPage('score');
+}
+
+function refreshTotals(t) {
+  const {tot,played,rel}=teamScore(t);
+  const e=id=>document.getElementById(id);
+  const vrel=e(`sv-rel-${t.id}`);
+  if(vrel){ vrel.textContent=played>0?relStr(rel):'E'; vrel.style.color=rel<0?'var(--red)':rel>0?'var(--over)':'var(--text)'; }
+  const vtot=e(`sv-tot-${t.id}`); if(vtot) vtot.textContent=tot||'—';
+  const vhls=e(`sv-hls-${t.id}`); if(vhls) vhls.textContent=`${played}/9`;
+  const ftot=e(`sf-tot-${t.id}`); if(ftot) ftot.textContent=tot||'—';
+  const frel=e(`sf-rel-${t.id}`); if(frel) frel.innerHTML=`<span class="${relCls(rel)}" style="font-weight:700">${played>0?relStr(rel):'—'}</span>`;
+}
+
+// ─────────────────────────────────────────────
+//  RENDER: LEADERBOARD
+// ─────────────────────────────────────────────
+function rLeaderboard() {
+  if(!S.locked||S.teams.length===0) return `
+    <div class="empty"><span class="eic"></span><h3>No Teams Yet</h3><p>Add players and lock teams to see the leaderboard.</p></div>`;
+
+  const ranked=S.teams.map(t=>({...t,...teamScore(t)})).sort((a,b)=>{
+    if(!a.played&&!b.played) return 0;
+    if(!a.played) return 1; if(!b.played) return -1;
+    if(a.rel!==b.rel) return a.rel-b.rel;
+    return b.played-a.played;
+  });
+
+  const rankLabel=(i,played)=>{
+    const cls=!played?'':i===0?'r1':i===1?'r2':i===2?'r3':'';
+    return `<span class="lb-rank ${cls}">${i+1}</span>`;
+  };
+
+  return `
+    <div class="lb-header">
+      <h2>Leaderboard</h2>
+      <p>Blue Boy West &nbsp;·&nbsp; Par 33 &nbsp;·&nbsp; Charlie Rule: −1</p>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="lb-table">
+        <thead>
+          <tr><th>#</th><th style="text-align:left">Team</th><th style="text-align:right">Score</th></tr>
+        </thead>
+        <tbody>
+          ${ranked.map((t,i)=>`
+            <tr class="${i===0&&t.played?'lb-lead':''}">
+              <td>${rankLabel(i,t.played)}</td>
+              <td>
+                <div class="lb-players">${esc(teamName(t))}</div>
+                <div class="lb-holes">${t.played}/9 holes</div>
+              </td>
+              <td class="lb-score-col">
+                ${t.played
+                  ?`<div class="lb-strokes">${t.tot}</div><div class="lb-rel ${relCls(t.rel)}">${relStr(t.rel)}</div>`
+                  :`<div style="color:var(--muted);font-size:.78rem">—</div>`}
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;font-size:.68rem;color:var(--muted);text-align:center;letter-spacing:.5px">
+      RED = UNDER PAR &nbsp;·&nbsp; Updates live as scores are entered
+    </div>
+
+    `;
+}
+
+// ─────────────────────────────────────────────
+//  RENDER: RULES
+// ─────────────────────────────────────────────
+function rRules() {
+  return `
+    <div class="rcard">
+      <div class="rnum">Scramble Rules</div>
+      <div class="rdesc">Everyone on the team hits their shot. The team picks the <strong>best shot</strong>. Everyone plays from that spot. Repeat until the ball is in the hole. The team records one score per hole.</div>
+      <div class="rquote"><span class="sp">Dennis:</span> "This is designed so that even the weakest, most pathetic members of the group can contribute without completely destroying everyone else's experience."</div>
+    </div>
+
+    <div class="rcard" style="--rcard-left:var(--blue)">
+      <div class="rnum">Rule 2 — The Putt-Putt Clause</div>
+      <div class="rdesc">Players who have only ever played mini-golf may:
+        <ul>
+          <li>Use the <strong>putter for any shot within 30 yards</strong> of the green</li>
+          <li>Claim <strong>immunity from mockery</strong> on holes 1–3 only</li>
+          <li>After hole 3: <em>fully exposed</em> to the gang's commentary</li>
+        </ul>
+      </div>
+      <div class="rquote"><span class="sp">Dee:</span> "Oh thank God, I thought I was going to be humiliated the whole time."<br><span class="sp">Dennis:</span> "You're going to be humiliated, Dee. Just... legally not until hole four."</div>
+    </div>
+
+    <div class="rcard">
+      <div class="rnum">Rule 3 — The Charlie Rule</div>
+      <div class="rdesc">Once per round, a team may invoke <strong>The Charlie Rule</strong>: one player hits with <strong>both eyes fully closed</strong>. If that blind shot lands closest, the team earns a <strong>−1 stroke bonus</strong>. Track it on your scorecard.</div>
+      <div class="rquote"><span class="sp">Charlie:</span> "So you're telling me my whole <em>thing</em> is now a <em>rule?</em> I've been doing this right the whole time?!"<br><span class="sp">Frank:</span> "Charlie's been accidentally cheating at golf for years. We're just making it official."</div>
+    </div>
+
+    <div class="rcard" style="--rcard-left:var(--orange)">
+      <div class="rnum">Rule 4 — The Throw</div>
+      <div class="rdesc">On <strong>Hole 3</strong>, any player may choose to <strong>throw the ball</strong> instead of teeing off. The team may use that thrown shot as the best ball. Standard scramble rules apply from there.</div>
+      <div class="rquote"><span class="sp">Charlie:</span> "I've been practicing this. I throw things <em>great.</em>"<br><span class="sp">Mac:</span> "That is not a sanctioned golf technique."<br><span class="sp">Charlie:</span> "It is <em>now.</em>"</div>
+    </div>
+
+    <div class="rcard" style="--rcard-left:var(--red)">
+      <div class="rnum">Rule 5 — Fight Milk</div>
+      <div class="rdesc">If any shot goes <strong>completely sideways</strong> into the woods, water, or an innocent bystander's, it counts as <strong>+2 strokes</strong>. The player who hit it must loudly announce <em>"Fore is for loosers"</em> before the team plays its next shot.</div>
+      <div class="rquote"><span class="sp">Mac:</span> "That's not fair! I have BIRD-like reflexes and the body of—"<br><span class="sp">Dennis:</span> "Mac. The ball hit a car."<br><span class="sp">Mac:</span> "A <em>parked</em> car. That means I had accuracy."</div>
+    </div>
+`;
+}
+
+// ─────────────────────────────────────────────
+//  BOOT
+// ─────────────────────────────────────────────
+renderPage('signup');
+</script>
+</body>
+</html>
